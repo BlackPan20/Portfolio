@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jonas Döring - Tec Duty Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #13131a;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0b0;
+            --accent-blue: #3b82f6;
+            --accent-purple: #8b5cf6;
+            --accent-cyan: #06b6d4;
+        }
+
+        .light-mode {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f3f4f6;
+            --text-primary: #0a0a0f;
+            --text-secondary: #4b5563;
+        }
+
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            transition: background 0.3s ease, color 0.3s ease;
+            overflow-x: hidden;
+        }
+
+        .galaxy-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(ellipse at top, #1e1b4b 0%, var(--bg-primary) 50%);
+        }
+
+        .light-mode .galaxy-bg {
+            background: radial-gradient(ellipse at top, #dbeafe 0%, var(--bg-primary) 50%);
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        .light-mode .star {
+            display: none;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple), var(--accent-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .card {
+            background: var(--bg-secondary);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .light-mode .card {
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(59, 130, 246, 0.3);
+        }
+
+        .nav-link {
+            position: relative;
+            color: var(--text-secondary);
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--text-primary);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            color: white;
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            font-weight: 600;
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.4);
+        }
+
+        .tech-badge {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            display: inline-block;
+            margin: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .tech-badge:hover {
+            background: rgba(59, 130, 246, 0.2);
+            transform: scale(1.1);
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .float-animation {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            background: transparent;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn.active {
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            color: white;
+            border: none;
+        }
+
+        .project-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #1e3a8a, #3b82f6, #8b5cf6);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            background: var(--bg-secondary);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 0.75rem;
+            color: var(--text-primary);
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+
+        .light-mode .contact-form input,
+        .light-mode .contact-form textarea {
+            border: 1px solid rgba(0, 0, 0, 0.2);
+        }
+
+        .contact-form input:focus,
+        .contact-form textarea:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+        }
+
+        .theme-toggle {
+            width: 60px;
+            height: 30px;
+            background: var(--bg-secondary);
+            border-radius: 15px;
+            position: relative;
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .theme-toggle-ball {
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            border-radius: 50%;
+            position: absolute;
+            top: 2px;
+            left: 3px;
+            transition: transform 0.3s ease;
+        }
+
+        .light-mode .theme-toggle-ball {
+            transform: translateX(30px);
+        }
+
+        .scroll-indicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple), var(--accent-cyan));
+            z-index: 1000;
+            transition: width 0.1s ease;
+        }
+
+        @media (max-width: 768px) {
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="galaxy-bg" id="galaxy"></div>
+    <div class="scroll-indicator" id="scrollIndicator"></div>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 backdrop-blur-md bg-opacity-80" style="background: rgba(10, 10, 15, 0.8);">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="text-2xl font-bold gradient-text">Jonas Döring</div>
+            <div class="hidden md:flex gap-8 items-center">
+                <a href="#home" class="nav-link">Home</a>
+                <a href="#about" class="nav-link">Über mich</a>
+                <a href="#services" class="nav-link">Services</a>
+                <a href="#projects" class="nav-link">Projekte</a>
+                <a href="#contact" class="nav-link">Kontakt</a>
+                <div class="theme-toggle" onclick="toggleTheme()">
+                    <div class="theme-toggle-ball"></div>
+                </div>
+            </div>
+            <button class="md:hidden text-2xl" onclick="toggleMobileMenu()">☰</button>
+        </div>
+        <div id="mobileMenu" class="hidden md:hidden px-6 pb-4">
+            <a href="#home" class="block py-2 nav-link">Home</a>
+            <a href="#about" class="block py-2 nav-link">Über mich</a>
+            <a href="#services" class="block py-2 nav-link">Services</a>
+            <a href="#projects" class="block py-2 nav-link">Projekte</a>
+            <a href="#contact" class="block py-2 nav-link">Kontakt</a>
+            <div class="py-2 flex items-center gap-2">
+                <span style="color: var(--text-secondary);">Theme:</span>
+                <div class="theme-toggle" onclick="toggleTheme()">
+                    <div class="theme-toggle-ball"></div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="min-h-screen flex items-center justify-center px-6 pt-20">
+        <div class="max-w-7xl w-full grid md:grid-cols-2 gap-12 items-center">
+            <div class="float-animation">
+                <div class="w-64 h-64 mx-auto rounded-full bg-gradient-to-br from-blue-500 via-purple-500 to-cyan-500 flex items-center justify-center text-6xl">
+                    👨‍💻
+                </div>
+            </div>
+            <div>
+                <h1 class="text-5xl md:text-6xl font-bold mb-4">
+                    Hi, ich bin <span class="gradient-text">Jonas Döring</span>
+                </h1>
+                <p class="text-xl md:text-2xl mb-4" style="color: var(--text-secondary);">
+                    Software Developer & Gründer von Tec Duty
+                </p>
+                <p class="text-lg mb-8" style="color: var(--text-secondary);">
+                    Softwareentwicklung für ihren Erfolg
+                </p>
+                <div class="flex gap-4">
+                    <a href="#projects" class="btn-primary">Projekte ansehen</a>
+                    <a href="#contact" class="btn-primary" style="background: transparent; border: 2px solid var(--accent-blue);">
+                        Kontakt aufnehmen
+                    </a>
+                </div>
+                <div class="flex gap-4 mt-8">
+                    <a href="mailto:jnsdrng@gmail.com" class="text-3xl hover:scale-110 transition-transform" title="Email">📧</a>
+                    <a href="https://github.com/BlackPan20" class="text-3xl hover:scale-110 transition-transform" title="GitHub">🔗</a>
+                    <a href="https://tecduty.netlify.app/" class="text-3xl hover:scale-110 transition-transform" title="business">💼</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="min-h-screen flex items-center justify-center px-6 py-20">
+        <div class="max-w-7xl w-full">
+            <h2 class="section-title gradient-text text-center mb-12">Über mich</h2>
+            <div class="grid md:grid-cols-2 gap-12">
+                <div class="card">
+                    <h3 class="text-2xl font-bold mb-4 gradient-text">Meine Geschichte</h3>
+                    <p style="color: var(--text-secondary); line-height: 1.8;">
+                        Als leidenschaftlicher Software Developer habe ich Tec Duty gegründet, um innovative 
+                        Softwarelösungen zu entwickeln, die Unternehmen und Organisationen dabei helfen, 
+                        ihre Ziele zu erreichen. Mit meinem Kollegen setze ich komplexe Projekte um und 
+                        verwandle Visionen in digitale Realität.
+                    </p>
+                    <p style="color: var(--text-secondary); line-height: 1.8; margin-top: 1rem;">
+                        Mein Fokus liegt auf modernen Web-Technologien und maßgeschneiderten Lösungen, 
+                        die perfekt auf die Bedürfnisse unserer Kunden zugeschnitten sind.
+                    </p>
+                    <div class="mt-6">
+                        <p style="color: var(--text-secondary);">📍 Standort: Lingen, Deutschland</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3 class="text-2xl font-bold mb-4 gradient-text">Technologie Stack</h3>
+                    <div class="flex flex-wrap">
+                        <span class="tech-badge">HTML5</span>
+                        <span class="tech-badge">CSS3</span>
+                        <span class="tech-badge">JavaScript</span>
+                        <span class="tech-badge">PHP</span>
+                        <span class="tech-badge">Python</span>
+                        <span class="tech-badge">Tailwind CSS</span>
+                        <span class="tech-badge">MySQL</span>
+                        <span class="tech-badge">Git</span>
+                        <span class="tech-badge">REST APIs</span>
+                        <span class="tech-badge">Responsive Design</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="min-h-screen flex items-center justify-center px-6 py-20">
+        <div class="max-w-7xl w-full">
+            <h2 class="section-title gradient-text text-center mb-12">Unsere Services</h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="card">
+                    <div class="text-5xl mb-4">🌐</div>
+                    <h3 class="text-2xl font-bold mb-4">Web App Entwicklung</h3>
+                    <p style="color: var(--text-secondary);">
+                        Maßgeschneiderte Web-Anwendungen mit modernsten Technologien. 
+                        Von einfachen Tools bis zu komplexen Enterprise-Lösungen.
+                    </p>
+                </div>
+                <div class="card">
+                    <div class="text-5xl mb-4">🚀</div>
+                    <h3 class="text-2xl font-bold mb-4">Landing Pages</h3>
+                    <p style="color: var(--text-secondary);">
+                        Hochkonvertierende Landing Pages, die Ihre Besucher begeistern 
+                        und zu Kunden machen. Responsive und SEO-optimiert.
+                    </p>
+                </div>
+                <div class="card">
+                    <div class="text-5xl mb-4">💻</div>
+                    <h3 class="text-2xl font-bold mb-4">Websites</h3>
+                    <p style="color: var(--text-secondary);">
+                        Professionelle Unternehmenswebsites mit modernem Design, 
+                        optimaler Performance und intuitiver Benutzerführung.
+                    </p>
+                </div>
+                <div class="card">
+                    <div class="text-5xl mb-4">📊</div>
+                    <h3 class="text-2xl font-bold mb-4">Excel Coding</h3>
+                    <p style="color: var(--text-secondary);">
+                        Automatisierung von Excel-Prozessen mit VBA und Python. 
+                        Komplexe Datenverarbeitung und individuelle Lösungen.
+                    </p>
+                </div>
+                <div class="card">
+                    <div class="text-5xl mb-4">🗄️</div>
+                    <h3 class="text-2xl font-bold mb-4">Database Projekte</h3>
+                    <p style="color: var(--text-secondary);">
+                        Datenbankdesign, -optimierung und -integration. Effiziente 
+                        Verwaltung großer Datenmengen mit SQL und NoSQL.
+                    </p>
+                </div>
+                <div class="card">
+                    <div class="text-5xl mb-4">🤝</div>
+                    <h3 class="text-2xl font-bold mb-4">Full-Service</h3>
+                    <p style="color: var(--text-secondary);">
+                        Von der Konzeption bis zur Wartung - wir begleiten Sie 
+                        durch den gesamten Entwicklungsprozess Ihres Projekts.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="min-h-screen flex items-center justify-center px-6 py-20">
+        <div class="max-w-7xl w-full">
+            <h2 class="section-title gradient-text text-center mb-8">Projekte</h2>
+            <div class="flex justify-center gap-4 mb-12 flex-wrap">
+                <button class="filter-btn active" onclick="filterProjects('all')">Alle</button>
+                <button class="filter-btn" onclick="filterProjects('webapp')">Web Apps</button>
+                <button class="filter-btn" onclick="filterProjects('website')">Websites</button>
+                <button class="filter-btn" onclick="filterProjects('database')">Database</button>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8" id="projectsGrid">
+                <div class="card project-item" data-category="webapp database">
+                    <div class="project-image">📚</div>
+                    <h3 class="text-xl font-bold mb-2">LK Sport (Tec Duty)</h3>
+                    <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                        Eine umfassende Software für Schulen zur effizienten Aufarbeitung 
+                        und Verwaltung von Schülerdaten. Integriert mit Datenbank-Backend 
+                        für optimale Performance.
+                    </p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="text-xs px-2 py-1 rounded" style="background: rgba(59, 130, 246, 0.2);">PHP</span>
+                        <span class="text-xs px-2 py-1 rounded" style="background: rgba(139, 92, 246, 0.2);">MySQL</span>
+                        <span class="text-xs px-2 py-1 rounded" style="background: rgba(6, 182, 212, 0.2);">JS</span>
+                    </div>
+                    <button onclick="comingsoon()" class="btn-primary w-full">Details ansehen</button>
+                </div>
+                <div class="card project-item" data-category="webapp">
+                    <div class="project-image">💼</div>
+                    <h3 class="text-xl font-bold mb-2">Web Apps für FLL</h3>
+                    <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                        Im Rahmen der First Lego League (FLL) entwickelte Web-Anwendungen. Zugleich Leitender Entwickller 
+                        und Mentor für das Team Franzirobots.
+                    </p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="text-xs px-2 py-1 rounded" style="background: rgba(59, 130, 246, 0.2);">HTML</span>
+                        <span class="text-xs px-2 py-1 rounded" style="background: rgba(139, 92, 246, 0.2);">Python</span>
+                        <span class="text-xs px-2 py-1 rounded" style="background: rgba(6, 182, 212, 0.2);">Tailwind</span>
+                        <span class="text-xs px-2 py-1 rounded" style="background: rgba(6, 182, 212, 0.2);">JS</span>
+                        <span class="text-xs px-2 py-1 rounded" style="background: rgba(6, 182, 212, 0.2);">PHP</span>
+                    </div>
+                    <button class="btn-primary w-full">Details ansehen</button>
+                </div>
+                <div class="card project-item" data-category="website">
+                    <div class="project-image">🏢</div>
+                    <h3 class="text-xl font-bold mb-2">Corporate Website (Tec Duty)</h3>
+                    <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                        Moderne Unternehmenswebsite mit CMS-Integration, 
+                        mehrsprachiger Unterstützung und optimaler SEO.
+                    </p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="text-xs px-2 py-1 rounded" style="background: rgba(59, 130, 246, 0.2);">HTML</span>
+                        <span class="text-xs px-2 py-1 rounded" style="background: rgba(139, 92, 246, 0.2);">CSS</span>
+                        <span class="text-xs px-2 py-1 rounded" style="background: rgba(6, 182, 212, 0.2);">JS</span>
+                    </div>
+                    <button class="btn-primary w-full">Details ansehen</button>
+                </div>
+                <div class="card project-item" data-category="database">
+                    <div class="project-image">🗃️</div>
+                    <h3 class="text-xl font-bold mb-2">Inventory System</h3>
+                    <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                        Vollständiges Lagerverwaltungssystem mit Barcode-Scanner-Integration 
+                        und automatischer Bestandsführung.
+                    </p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="text-xs px-2 py-1 rounded" style="background: rgba(59, 130, 246, 0.2);">Python</span>
+                        <span class="text-xs px-2 py-1 rounded" style="background: rgba(139, 92, 246, 0.2);">MySQL</span>
+                        <span class="text-xs px-2 py-1 rounded" style="background: rgba(6, 182, 212, 0.2);">REST API</span>
+                    </div>
+                    <button class="btn-primary w-full">Details ansehen</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="min-h-screen flex items-center justify-center px-6 py-20">
+        <div class="max-w-4xl w-full">
+            <h2 class="section-title gradient-text text-center mb-8">Kontakt aufnehmen</h2>
+            <p class="text-center mb-12 text-xl" style="color: var(--text-secondary);">
+                Haben Sie ein Projekt im Kopf? Lassen Sie uns darüber sprechen!
+            </p>
+            <div class="card">
+                <form class="contact-form" id="contactForm">
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <input type="text" id="name" placeholder="Ihr Name" required>
+                        <input type="email" id="email" placeholder="Ihre E-Mail" required>
+                    </div>
+                    <input type="text" id="subject" placeholder="Betreff" required>
+                    <textarea rows="6" id="message" placeholder="Ihre Nachricht" required></textarea>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <button type="button" onclick="sendEmail()" class="btn-primary w-full">
+                            📧 E-Mail senden
+                        </button>
+                        <a href="https://calendar.app.google/sBXswZTSvKvcmg9Z9" target="_blank" class="btn-primary w-full text-center flex items-center justify-center gap-2" style="text-decoration: none;">
+                            📅 Termin vereinbaren
+                        </a>
+                    </div>
+                </form>
+                <div class="mt-8 pt-8 border-t" style="border-color: rgba(255, 255, 255, 0.1);">
+                    <div class="grid md:grid-cols-3 gap-6 text-center">
+                        <div>
+                            <div class="text-3xl mb-2">📧</div>
+                            <p style="color: var(--text-secondary);">Email</p>
+                            <a href="mailto:jnsdrng@gmail.com" class="gradient-text hover:underline">jnsdrng@gmail.com</a>
+                        </div>
+                        <div>
+                            <div class="text-3xl mb-2">📍</div>
+                            <p style="color: var(--text-secondary);">Standort</p>
+                            <p class="gradient-text">Lingen, Deutschland</p>
+                        </div>
+                        <div>
+                            <div class="text-3xl mb-2">💼</div>
+                            <p style="color: var(--text-secondary);">Unternehmen</p>
+                            <p class="gradient-text">Tec Duty</p>
+                        </div>
+                    </div>
+                    <div class="mt-8 text-center">
+                        <p style="color: var(--text-secondary); margin-bottom: 1rem;">Oder buchen Sie direkt einen Termin:</p>
+                        <a href="https://calendar.app.google/sBXswZTSvKvcmg9Z9" target="_blank" class="inline-flex items-center gap-2 px-6 py-3 rounded-lg border-2 transition-all hover:scale-105" style="border-color: var(--accent-blue); color: var(--accent-blue);">
+                            <span class="text-2xl">📅</span>
+                            <span class="font-semibold">Jetzt Termin buchen</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-8 text-center" style="background: var(--bg-secondary);">
+        <p style="color: var(--text-secondary);">
+            © 2025 Tec Duty - Jonas Döring. Alle Rechte vorbehalten.
+        </p>
+        <p style="color: var(--text-secondary); margin-top: 0.5rem;">
+            Softwareentwicklung für ihren Erfolg
+        </p>
+    </footer>
+
+    <script>
+        // Theme Toggle
+        function toggleTheme() {
+            document.body.classList.toggle('light-mode');
+            localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
+        }
+
+        // Load saved theme
+        if (localStorage.getItem('theme') === 'light') {
+            document.body.classList.add('light-mode');
+        }
+
+        // Mobile Menu Toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Smooth Scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    // Close mobile menu if open
+                    document.getElementById('mobileMenu').classList.add('hidden');
+                }
+            });
+        });
+
+        // Scroll Progress Indicator
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrollPercentage = (scrollTop / scrollHeight) * 100;
+            document.getElementById('scrollIndicator').style.width = scrollPercentage + '%';
+        });
+
+        // Create Stars for Galaxy Background
+        function createStars() {
+            const galaxy = document.getElementById('galaxy');
+            const starCount = 100;
+            
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                galaxy.appendChild(star);
+            }
+        }
+
+        createStars();
+
+        // Project Filter
+        // Project Filter
+        function filterProjects(category) {
+            const projects = document.querySelectorAll('.project-item');
+            const buttons = document.querySelectorAll('.filter-btn');
+            
+            // Update active button
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Filter projects
+            projects.forEach(project => {
+                if (category === 'all' || project.dataset.category.includes(category)) {
+                    project.style.display = 'block';
+                    setTimeout(() => {
+                        project.style.opacity = '1';
+                        project.style.transform = 'scale(1)';
+                    }, 10);
+                } else {
+                    project.style.opacity = '0';
+                    project.style.transform = 'scale(0.8)';
+                    setTimeout(() => {
+                        project.style.display = 'none';
+                    }, 300);
+                }
+            });
+        }
+
+        // Contact Form - Send Email
+        function sendEmail() {
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const subject = document.getElementById('subject').value;
+            const message = document.getElementById('message').value;
+
+            if (!name || !email || !subject || !message) {
+                alert('Bitte füllen Sie alle Felder aus!');
+                return;
+            }
+
+            // E-Mail-Body zusammenstellen
+            const emailBody = `Name: ${name}%0D%0AE-Mail: ${email}%0D%0A%0D%0ANachricht:%0D%0A${encodeURIComponent(message)}`;
+            
+            // mailto: Link erstellen und öffnen
+            const mailtoLink = `mailto:jnsdrng@gmail.com?subject=${encodeURIComponent(subject)}&body=${emailBody}`;
+            
+            window.location.href = mailtoLink;
+            
+            // Formular nach kurzer Verzögerung zurücksetzen
+            setTimeout(() => {
+                document.getElementById('contactForm').reset();
+                alert('Ihr E-Mail-Programm wurde geöffnet. Bitte senden Sie die vorausgefüllte E-Mail ab.');
+            }, 1000);
+        }
+
+        // Intersection Observer for Animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all cards
+        document.querySelectorAll('.card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(card);
+        });
+
+        // Parallax Effect for Hero Section
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const parallaxElements = document.querySelectorAll('.float-animation');
+            parallaxElements.forEach(el => {
+                const speed = 0.5;
+                el.style.transform = `translateY(${scrolled * speed}px)`;
+            });
+        });
+
+        // Add typing effect to hero title
+        function typeWriter(element, text, speed = 100) {
+            let i = 0;
+            element.innerHTML = '';
+            function type() {
+                if (i < text.length) {
+                    element.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                }
+            }
+            type();
+        }
+
+        // Animate numbers counting up
+        function animateValue(element, start, end, duration) {
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                element.textContent = Math.floor(progress * (end - start) + start);
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+
+        // Add cursor trail effect
+        let cursorTrail = [];
+        const maxTrailLength = 20;
+
+        document.addEventListener('mousemove', (e) => {
+            if (document.body.classList.contains('light-mode')) return;
+            
+            const trail = document.createElement('div');
+            trail.style.position = 'fixed';
+            trail.style.width = '4px';
+            trail.style.height = '4px';
+            trail.style.borderRadius = '50%';
+            trail.style.background = 'rgba(59, 130, 246, 0.5)';
+            trail.style.left = e.clientX + 'px';
+            trail.style.top = e.clientY + 'px';
+            trail.style.pointerEvents = 'none';
+            trail.style.zIndex = '9999';
+            trail.style.transition = 'opacity 0.5s ease';
+            
+            document.body.appendChild(trail);
+            cursorTrail.push(trail);
+            
+            if (cursorTrail.length > maxTrailLength) {
+                const oldTrail = cursorTrail.shift();
+                oldTrail.style.opacity = '0';
+                setTimeout(() => oldTrail.remove(), 500);
+            }
+            
+            setTimeout(() => {
+                trail.style.opacity = '0';
+            }, 100);
+        });
+
+        // Add glitch effect to title on hover
+        const title = document.querySelector('.gradient-text');
+        if (title) {
+            title.addEventListener('mouseenter', () => {
+                title.style.animation = 'glitch 0.3s ease';
+            });
+        }
+
+        // Keyboard Navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                document.getElementById('mobileMenu').classList.add('hidden');
+            }
+        });
+
+        // Add loading animation
+        window.addEventListener('load', () => {
+            document.body.style.opacity = '0';
+            setTimeout(() => {
+                document.body.style.transition = 'opacity 0.5s ease';
+                document.body.style.opacity = '1';
+            }, 100);
+        });
+
+        console.log('%c🚀 Tec Duty Portfolio', 'font-size: 20px; color: #3b82f6; font-weight: bold;');
+        console.log('%cSoftwareentwicklung für ihren Erfolg', 'font-size: 14px; color: #8b5cf6;');
+
+        function comingsoon(){
+            alert("Diese Funktion ist noch in Arbeit und bald verfügbar!");
+        }
+    </script>
+</body>
+</html>
